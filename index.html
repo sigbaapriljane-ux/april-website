@@ -1,0 +1,52 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+    <title>Login</title>
+    <link rel="stylesheet" type="text/css" href="indexstyle.css">
+    <script>
+        // Sample hardcoded credentials (for demo purposes)
+        const validUsername = "";
+        const validPassword = "";
+
+        function login() {
+            const username = document.getElementById("username").value;
+            const password = document.getElementById("password").value;
+
+            if(username === validUsername && password === validPassword) {
+                // Redirect to dashboard
+                window.location.href = "dashboard.html";
+            } else {
+                alert("Invalid username or password!");
+            }
+        }
+
+        function redirectToSignup() {
+            window.location.href = "registration.html"; // Path to your registration page
+        }
+    </script>
+</head>
+<body>
+    <table id="tbl">
+        <tr>
+            <td>
+                <img src="images/g.png" width="50%" height="50%" alt="Logo">
+            </td>
+        </tr>
+        <tr>
+            <th colspan="1">ADMINISTRATOR LOGIN</th>
+        </tr>
+        <tr>
+            <td><input type="text" id="username" name="username" placeholder="Username"></td>
+        </tr>
+        <tr>
+            <td><input type="password" id="password" name="pass" placeholder="Password"></td>
+        </tr>
+        <tr>
+            <td>
+                <button name="login" onclick="login()">LOGIN</button>
+                <button name="signup" onclick="redirectToSignup()">SIGN UP</button>
+            </td>
+        </tr>
+    </table>
+</body>
+</html>

@@ -1,0 +1,469 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Dashboard</title>
+  <style>
+    body {
+      font-family: timesnewroman;
+      background-image: url('images/loL.webp');
+      background-size: cover;
+      background-position: center;
+      margin: 0;
+      padding: 0;
+      height: 100vh;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .navbar {
+      background-color: darkgray;
+      padding: 10px 10px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      color: white;
+      font-weight: bold;
+      box-shadow: 0px 4px 10px rgba(250, 85, 124, 0.5);
+    }
+
+    .logo-container {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .logo-container img {
+      width: 60px;
+      margin-top: 10px;
+    }
+
+    .logo-container h1 {
+      font-size: 14px;
+      margin: 0;
+    }
+
+    .navbar a {
+      color: white;
+      text-decoration: none;
+      margin: 0 15px;
+      font-weight: bold;
+      transition: color 0.3s ease;
+      cursor: pointer;
+    }
+
+    .navbar a:hover {
+      color: black;
+    }
+
+    .dashboard-container {
+      flex: 1;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 60px 20px;
+    }
+
+    .dashboard {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 50px;
+      max-width: 900px;
+      width: 100%;
+      justify-items: center;
+    }
+
+    .card {
+      background: rgba(200, 200, 200, 0.3);
+      backdrop-filter: blur(10px);
+      width: 250px;
+      height: 100px;
+      border-radius: 50px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      font-weight: bold;
+      font-size: 14px;
+      transition: transform 0.5s ease;
+      text-align: center;
+      cursor: pointer;
+    }
+
+    .card:hover {
+      transform: scale(1.05);
+      box-shadow: 0 10px 20px rgba(255, 250, 250, 0.6);
+    }
+
+    .footer {
+      text-align: center;
+      background-color: darkgray;
+      color: white;
+      padding: 5px;
+      font-size: 14px;
+    }
+
+    #content {
+      padding: 40px 20px;
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 25px;
+    }
+
+    .gallery-img {
+      width: 280px;
+      height: 180px;
+      object-fit: cover;
+      border-radius: 10px;
+      box-shadow: 0 5px 12px rgba(0,0,0,0.2);
+      transition: 0.3s;
+    }
+
+    .gallery-img:hover {
+      transform: scale(1.05);
+    }
+
+    .item-box {
+      width: 220px;
+      padding: 15px;
+      border-radius: 12px;
+      background: rgba(255,255,255,0.9);
+      text-align: center;
+      box-shadow: 0 6px 14px rgba(0,0,0,0.12);
+    }
+
+    .item-box img {
+      width: 100%;
+      height: 150px;
+      object-fit: cover;
+      border-radius: 10px;
+    }
+
+    .section-title {
+      width: 100%;
+      text-align: center;
+      font-size: 26px;
+      font-weight: bold;
+      color: white;
+      text-shadow: 1px 1px 3px black;
+      margin-bottom: 20px;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- NAVIGATION BAR -->
+  <div class="navbar">
+    <div class="logo-container">
+      <img src="images/g.png" alt="Logo">
+      <h1>WELCOME TO SIGBA'S AUTO SHOP</h1>
+    </div>
+    <div>
+      <a onclick="showHome()">HOME</a>
+      <a onclick="showGallery()">GALLERY</a>
+      <a onclick="showItems()">ITEMS</a>
+      <a onclick="showAbout()">ABOUT US</a>
+      <a onclick="showContact()">CONTACT US</a>
+      <a onclick="logout()">LOGOUT</a>
+    </div>
+  </div>
+
+  <!-- DASHBOARD CARDS -->
+  <div class="dashboard-container" id="dashboard">
+    <div class="dashboard">
+      <div class="card" onclick="showBrand()">BRANDS OF THE CAR</div>
+      <div class="card" onclick="showPrices()">PRICES OF THE CARS</div>
+      <div class="card" onclick="showCarInventory()">CAR INVENTORY</div>
+      <div class="card" onclick="showCustomers()">CUSTOMERS</div>
+      <div class="card" onclick="showOrders()">ORDER</div>
+      <div class="card" onclick="showSalesReports()">SALES REPORTS</div>
+    </div>
+  </div>
+
+  <!-- DYNAMIC CONTENT -->
+  <div id="content"></div>
+
+  <!-- FOOTER -->
+  <div class="footer">
+    All rights reserved @sigba 2025
+  </div>
+
+<script>
+/* GLOBAL ORDERS ARRAY */
+  let orders = [];
+
+  /* BUY FUNCTION */
+  function buyCar(carName, carPrice) {
+    const customerName = prompt("Enter your name:");
+    if (!customerName) return alert("Purchase cancelled.");
+
+    const customerLocation = prompt("Enter your location:");
+    if (!customerLocation) return alert("Purchase cancelled.");
+
+    const customerPhone = prompt("Enter your phone number:");
+    if (!customerPhone) return alert("Purchase cancelled.");
+
+    const currentDate = new Date().toLocaleString();
+
+    const order = {
+      name: customerName,
+      location: customerLocation,
+      phone: customerPhone,
+      item: carName,
+      price: carPrice,
+      date: currentDate,
+      status: "Pending"
+    };
+
+    orders.push(order);
+    alert(`Thank you ${customerName}! Your order for ${carName} has been placed.`);
+
+    showOrders();
+  }
+
+  /* SHOW ORDERS */
+  function showOrders() {
+    document.getElementById("dashboard").style.display = "none";
+
+    let ordersHTML = `<h2 class="section-title">ORDERS</h2>`;
+
+    if (orders.length === 0) {
+      ordersHTML += `<p style="color:white; text-align:center; font-size:20px;">No orders yet.</p>`;
+    } else {
+      orders.forEach((order, index) => {
+        ordersHTML += `
+          <div class="item-box">
+            <h3>Order #${index + 1}</h3>
+            <p>Customer: ${order.name}</p>
+            <p>Location: ${order.location}</p>
+            <p>Phone: ${order.phone}</p>
+            <p>Item: ${order.item}</p>
+            <p>Price: ${order.price}</p>
+            <p>Date: ${order.date}</p>
+            <p>Status: ${order.status}</p>
+          </div>
+        `;
+      });
+    }
+
+    document.getElementById("content").innerHTML = ordersHTML;
+  }
+  /* FIXED LOGOUT */
+  function logout() {
+    if (confirm("Are you sure you want to logout?")) {
+      window.location.href = "index.html";
+    }
+  }
+
+  function showHome() {
+    document.getElementById("dashboard").style.display = "flex";
+    document.getElementById("content").innerHTML = "";
+  }
+
+
+  function showBrand() {
+    document.getElementById("dashboard").style.display = "none";
+    document.getElementById("content").innerHTML = `
+      <h2 class="section-title">BRANDS OF THE CAR</h2>
+
+      <div class="item-box"><img src="images/toyota-supra.jpg"><h3>Toyota Supra</h3></div>
+      <div class="item-box"><img src="images/mustang.jpg"><h3>Ford Mustang</h3></div>
+      <div class="item-box"><img src="images/bmw-m4.jpg"><h3>BMW M4</h3></div>
+      <div class="item-box"><img src="images/lambo.jpg"><h3>Lamborghini Aventador</h3></div>
+      <div class="item-box"><img src="images/ferrari.avif"><h3>Ferrari 488</h3></div>
+      <div class="item-box"><img src="images/honda-civic.jpg"><h3>Honda Civic</h3></div>
+      <div class="item-box"><img src="images/toyota-hilux.jpg"><h3>Toyota Hilux</h3></div>
+      <div class="item-box"><img src="images/jeep-wrangler.jpg"><h3>Jeep Wrangler</h3></div>
+      <div class="item-box"><img src="images/nissan-gtr.webp"><h3>Nissan GT-R</h3></div>
+      <div class="item-box"><img src="images/mercedes-amg.jpg"><h3>Mercedes AMG GT</h3></div>
+    `;
+  }
+
+  function showPrices() {
+    document.getElementById("dashboard").style.display = "none";
+    document.getElementById("content").innerHTML = `
+      <h2 class="section-title">PRICES OF THE CARS</h2>
+
+      <div class="item-box">
+        <img src="images/toyota-supra.jpg">
+        <h3>Toyota Supra</h3>
+        <p>₱4,900,000</p>
+        <button onclick="buyCar('Toyota Supra','₱4,900,000')">BUY</button>
+      </div>
+
+      <div class="item-box">
+        <img src="images/mustang.jpg">
+        <h3>Ford Mustang</h3>
+        <p>₱3,200,000</p>
+        <button onclick="buyCar('Ford Mustang','₱3,200,000')">BUY</button>
+      </div>
+
+      <div class="item-box">
+        <img src="images/bmw-m4.jpg">
+        <h3>BMW M4</h3>
+        <p>₱6,350,000</p>
+        <button onclick="buyCar('BMW M4','₱6,350,000')">BUY</button>
+      </div>
+
+      <div class="item-box">
+        <img src="images/lambo.jpg">
+        <h3>Lamborghini Aventador</h3>
+        <p>₱45,000,000</p>
+        <button onclick="buyCar('Lamborghini Aventador','₱45,000,000')">BUY</button>
+      </div>
+
+      <div class="item-box">
+        <img src="images/ferrari.avif">
+        <h3>Ferrari 488</h3>
+        <p>₱25,000,000</p>
+        <button onclick="buyCar('Ferrari 488','₱25,000,000')">BUY</button>
+      </div>
+
+      <div class="item-box">
+        <img src="images/honda-civic.jpg">
+        <h3>Honda Civic</h3>
+        <p>₱1,350,000</p>
+        <button onclick="buyCar('Honda Civic','₱1,350,000')">BUY</button>
+      </div>
+
+      <div class="item-box">
+        <img src="images/toyota-hilux.jpg">
+        <h3>Toyota Hilux</h3>
+        <p>₱1,850,000</p>
+        <button onclick="buyCar('Toyota Hilux','₱1,850,000')">BUY</button>
+      </div>
+
+      <div class="item-box">
+        <img src="images/jeep-wrangler.jpg">
+        <h3>Jeep Wrangler</h3>
+        <p>₱5,100,000</p>
+        <button onclick="buyCar('Jeep Wrangler','₱5,100,000')">BUY</button>
+      </div>
+
+      <div class="item-box">
+        <img src="images/nissan-gtr.webp">
+        <h3>Nissan GT-R</h3>
+        <p>₱8,900,000</p>
+        <button onclick="buyCar('Nissan GT-R','₱8,900,000')">BUY</button>
+      </div>
+
+      <div class="item-box">
+        <img src="images/mercedes-amg.jpg">
+        <h3>Mercedes AMG GT</h3>
+        <p>₱9,500,000</p>
+        <button onclick="buyCar('Mercedes AMG GT','₱9,500,000')">BUY</button>
+      </div>
+    `;
+  }
+
+  function showCarInventory() {
+    document.getElementById("dashboard").style.display = "none";
+    document.getElementById("content").innerHTML = `
+      <h2 class="section-title">CAR INVENTORY</h2>
+
+      <div class="item-box"><img src="images/toyota-supra.jpg"><h3>Toyota Supra</h3><p>"A legend reborn, the Toyota Supra fuses raw power with sleek precision. Its roaring engine and sculpted frame embody speed, style"</h3><p>Year Introduced: 1978</p></div>
+      <div class="item-box"><img src="images/mustang.jpg"><h3>Ford Mustang</h3><p>"An icon of American muscle, the Ford Mustang commands attention with its bold stance, thunderous roar, and untamed spirit freedom, power"</h3><p>Year Introduced: 1964</p></div>
+      <div class="item-box"><img src="images/bmw-m4.jpg"><h3>BMW M4</h3><p>"The BMW M4 blends precision engineering with ferocious power every curve, every roar, every shift is a symphony of performance and style"</h3><p>Year Introduced: 2014</p></div>
+      <div class="item-box"><img src="images/lambo.jpg"><h3>Lamborghini Aventador</h3><p>"The Lamborghini Aventador is pure adrenaline incarnate sharp lines, blistering speed, and a roar that commands the road"</h3><p>Year Introduced: 2011</p></div>
+      <div class="item-box"><img src="images/ferrari.avif"><h3>Ferrari 488</h3><p>"The Ferrari 488 is a masterpiece of speed and elegance sculpted for the thrill, engineered for the roar, and built to ignite every drive"</h3><p>Year Introduced: 2015</p></div>
+      <div class="item-box"><img src="images/honda-civic.jpg"><h3>Honda Civic</h3><p>"The Honda Civic blends style, efficiency, and reliability every drive feels smart, smooth, and effortlessly spirited"</h3><p>Year Introduced: 1972</p></div>
+      <div class="item-box"><img src="images/toyota-hilux.jpg"><h3>Toyota Hilux</h3><p>"The Toyota Hilux is built tough unyielding, dependable, and ready to conquer any road or challenge with confidence"</h3><p>Year Introduced: 1968</p></div>
+      <div class="item-box"><img src="images/jeep-wrangler.jpg"><h3>Jeep Wrangler</h3><p>"The Jeep Wrangler is adventure unleashed rugged, fearless, and built to take you off the beaten path"</h3><p>Year Introduced: 1986</p></div>
+      <div class="item-box"><img src="images/nissan-gtr.webp"><h3>Nissan GT-R</h3><p>"The Nissan GT-R is pure performance incarnate relentless speed, precision engineering, and a thrill that hits every curve"</h3><p>Year Introduced: 2007</p></div>
+      <div class="item-box"><img src="images/mercedes-amg.jpg"><h3>Mercedes AMG GT</h3><p>"The Mercedes AMG GT is the art of power sleek, commanding, and engineered to thrill with every heartbeat of its engine"</h3><p>Year Introduced: 2014</p></div>
+    `;
+  }
+
+  function showCustomers() {
+    document.getElementById("dashboard").style.display = "none";
+    document.getElementById("content").innerHTML = `
+      <h2 class="section-title">CUSTOMERS</h2>
+
+      <div class="item-box"><h3>Karylle Venus</h3><p>Zamboanga City</p></div>
+      <div class="item-box"><h3>Armyeda Aradais</h3><p>Zamboanga Sibugay</p></div>
+      <div class="item-box"><h3>Nhersa Jackaria</h3><p>Zamboanga City</p></div>
+      <div class="item-box"><h3>Taiba Francisco</h3><p>Zamboanga del Norte</p></div>
+    `;
+  }
+
+  function showGallery() {
+    document.getElementById("dashboard").style.display = "none";
+    document.getElementById("content").innerHTML = `
+      <h2 class="section-title">GALLERY</h2>
+
+      <img src="images/toyota-supra.jpg" class="gallery-img">
+      <img src="images/mustang.jpg" class="gallery-img">
+      <img src="images/bmw-m4.jpg" class="gallery-img">
+      <img src="images/lambo.jpg" class="gallery-img">
+      <img src="images/ferrari.avif" class="gallery-img">
+      <img src="images/honda-civic.jpg" class="gallery-img">
+      <img src="images/toyota-hilux.jpg" class="gallery-img">
+      <img src="images/jeep-wrangler.jpg" class="gallery-img">
+      <img src="images/nissan-gtr.webp" class="gallery-img">
+      <img src="images/mercedes-amg.jpg" class="gallery-img">
+    `;
+  }
+
+  function showItems() {
+    document.getElementById("dashboard").style.display = "none";
+    document.getElementById("content").innerHTML = `
+      <h2 class="section-title">ITEMS</h2>
+
+      <div class="item-box"><img src="images/oil.jpg"><h3>Engine Oil</h3><p>₱550</p></div>
+      <div class="item-box"><img src="images/battery.jpg"><h3>Car Battery</h3><p>₱4,500</p></div>
+      <div class="item-box"><img src="images/tire.jpg"><h3>Car Tire</h3><p>₱3,200</p></div>
+      <div class="item-box"><img src="images/brakepads.webp"><h3>Brake Pads</h3><p>₱1,800</p></div>
+    `;
+  }
+
+  function showAbout() {
+    document.getElementById("dashboard").style.display = "none";
+    document.getElementById("content").innerHTML = `
+      <h2 class="section-title">ABOUT US</h2>
+      <div style="max-width:700px; color:white; font-size:30px; font-weight:bold; text-align:center;">
+        Sigba's Auto Shop is dedicated to providing high-quality vehicles and car accessories.
+        We aim to deliver excellent customer service and trusted automotive products.
+      </div>
+    `;
+  }
+
+  function showContact() {
+    document.getElementById("dashboard").style.display = "none";
+    document.getElementById("content").innerHTML = `
+      <h2 class="section-title">CONTACT US</h2>
+      <div style="max-width:600px; color:white; font-size:30px; font-weight:bold; text-align:center;">
+        <p>📍 Address: Zamboanga City, Philippines</p>
+        <p>📞 Phone: 09653829006</p>
+        <p>📧 Email: sigbaautos@gmail.com</p>
+      </div>
+    `;
+  }
+
+  function showOrders() {
+    document.getElementById("dashboard").style.display = "none";
+    document.getElementById("content").innerHTML = `
+      <h2 class="section-title">ORDERS</h2>
+
+      <div class="item-box"><h3>Order #001</h3><p>Customer: Karylle</p><p>Item: Toyota Supra</p><p>Status: Completed</p></div>
+      <div class="item-box"><h3>Order #002</h3><p>Customer: Armyeda</p><p>Item: Honda Civic</p><p>Status: Pending</p></div>
+      <div class="item-box"><h3>Order #003</h3><p>Customer: Nhersa</p><p>Item: Engine Oil</p><p>Status: Completed</p></div>
+    `;
+  }
+
+  function showSalesReports() {
+    document.getElementById("dashboard").style.display = "none";
+    document.getElementById("content").innerHTML = `
+      <h2 class="section-title">SALES REPORT</h2>
+
+      <div class="item-box"><h3>Toyota Supra</h3><p>Sold: 12 units</p><p>Total Sales: ₱58,800,000</p></div>
+      <div class="item-box"><h3>Honda Civic</h3><p>Sold: 25 units</p><p>Total Sales: ₱33,750,000</p></div>
+      <div class="item-box"><h3>Engine Oil</h3><p>Sold: 140 pcs</p><p>Total Sales: ₱77,000</p></div>
+    `;
+  }
+
+</script>
+
+</body>
+</html>  
